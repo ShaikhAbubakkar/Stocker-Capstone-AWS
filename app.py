@@ -236,6 +236,8 @@ def signup():
             verification_token = secrets.token_urlsafe(32)
             verification_token_hash = _hash_token(verification_token)
             verification_sent_at = datetime.utcnow().isoformat()
+            logger.info(f"Generated verification token for {email}: {verification_token}")
+            logger.info(f"Token hash to store: {verification_token_hash}")
             users_table.put_item(Item={
                 'email': email,
                 'user_id': user_id,
@@ -288,12 +290,15 @@ def verify_email():
         return redirect(url_for('login'))
 
     token_hash = _hash_token(token)
+    logger.info(f"Verification attempt - Token: {token}")
+    logger.info(f"Verification attempt - Token hash: {token_hash}")
     try:
         # Scan is avoided; rely on direct lookup with token hash (requires token hash stored on user item)
         response = users_table.scan(
             FilterExpression=Attr('email_verification_token_hash').eq(token_hash)
         )
         items = response.get('Items', [])
+        logger.info(f"Scan found {len(items)} users with token hash")
         if not items:
             flash('Verification link is invalid or expired', 'error')
             return redirect(url_for('login'))
