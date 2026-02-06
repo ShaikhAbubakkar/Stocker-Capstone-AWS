@@ -5,7 +5,7 @@ import os
 import multiprocessing
 
 # Server binding
-bind = os.getenv('GUNICORN_BIND', '127.0.0.1:8000')
+bind = os.getenv('GUNICORN_BIND', 'unix:/opt/stocker/stocker.sock')
 backlog = int(os.getenv('GUNICORN_BACKLOG', '2048'))
 
 # Worker configuration
