@@ -8,8 +8,8 @@
     <div class="navbar-container">
         <a href="{{ url_for('index') }}" class="navbar-logo">Stocker</a>
         <ul class="navbar-menu">
-            <li><a href="#about" class="navbar-link">About</a></li>
-            <li><a href="#contact" class="navbar-link">Contact</a></li>
+            <li><a href="{{ url_for('about') }}" class="navbar-link">About</a></li>
+            <li><a href="{{ url_for('contact') }}" class="navbar-link">Contact</a></li>
             <li><a href="{{ url_for('login') }}" class="navbar-link">Login</a></li>
             <li><a href="{{ url_for('signup') }}" class="navbar-cta">Get Started</a></li>
         </ul>
