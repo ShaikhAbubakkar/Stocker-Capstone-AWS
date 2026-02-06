@@ -630,56 +630,6 @@ def api_execute_trade():
             'timestamp': datetime.utcnow().isoformat()
         })
         logger.info(f"Transaction recorded: {transaction_id}")
-        
-        if action == 'buy':
-            # Check if user has enough cash
-            if cash_balance < total_cost:
-                return jsonify({'error': f'Insufficient funds. Need ${total_cost:.2f}, have ${cash_balance:.2f}'}), 400
-            
-            # Update holdings
-            current_qty = int(holdings.get(symbol, 0))
-            holdings[symbol] = str(current_qty + quantity)
-            cash_balance -= total_cost
-            
-        elif action == 'sell':
-            # Check if user has enough shares
-            current_qty = int(holdings.get(symbol, 0))
-            if current_qty < quantity:
-                return jsonify({'error': f'Insufficient shares. Have {current_qty}, trying to sell {quantity}'}), 400
-            
-            # Update holdings
-            holdings[symbol] = str(current_qty - quantity)
-            if holdings[symbol] == '0':
-                del holdings[symbol]
-            cash_balance += total_cost
-        
-        # Update portfolio in DynamoDB
-        portfolios_table.put_item(Item={
-            'user_id': user_id,
-            'email': user_email,
-            'holdings': holdings,
-            'cash_balance': cash_balance,
-            'total_transactions': int(portfolio.get('total_transactions', 0)) + 1,
-            'created_at': portfolio.get('created_at', datetime.utcnow().isoformat()),
-            'updated_at': datetime.utcnow().isoformat()
-        })
-        
-        # Record transaction
-        transaction_id = str(uuid.uuid4())
-        transactions_table.put_item(Item={
-            'transaction_id': transaction_id,
-            'user_id': user_id,
-            'email': user_email,
-            'symbol': symbol,
-            'action': action,
-            'quantity': quantity,
-            'price': price,
-            'total': total_cost,
-            'order_type': order_type,
-            'status': 'completed',
-            'timestamp': datetime.utcnow().isoformat()
-        })
-        
         logger.info(f"Trade executed: {user_email} - {action.upper()} {quantity} {symbol} @ ${price}")
         
         return jsonify({
