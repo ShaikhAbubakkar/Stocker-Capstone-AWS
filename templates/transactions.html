@@ -1,0 +1,301 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Transactions - Stocker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Transaction History</h1>
+    <p class="page-subtitle">Complete record of all trading activity</p>
+</div>
+
+<!-- Filters -->
+<div class="card mb-xl">
+    <div class="card-body">
+        <div class="transaction-filters">
+            <div class="filter-group">
+                <label class="filter-label">Type</label>
+                <select class="filter-select">
+                    <option value="all">All Transactions</option>
+                    <option value="buy">Buy Only</option>
+                    <option value="sell">Sell Only</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Date Range</label>
+                <select class="filter-select">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Symbol</label>
+                <input type="text" class="filter-input" placeholder="Filter by symbol">
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">&nbsp;</label>
+                <button class="btn btn-secondary">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transactions Table -->
+<div class="card">
+    <div class="card-header">
+        <div class="flex-between">
+            <h2 class="card-title">All Transactions</h2>
+            <button class="btn btn-secondary btn-sm">Export CSV</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Type</th>
+                        <th>Symbol</th>
+                        <th>Company</th>
+                        <th>Shares</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="mono">2026-01-28 14:32</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>NVDA</strong></td>
+                        <td>NVIDIA Corporation</td>
+                        <td>25</td>
+                        <td class="mono">$548.20</td>
+                        <td class="mono">$13,705.00</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-27 11:15</td>
+                        <td><span class="transaction-badge sell">SELL</span></td>
+                        <td><strong>META</strong></td>
+                        <td>Meta Platforms Inc.</td>
+                        <td>15</td>
+                        <td class="mono">$485.30</td>
+                        <td class="mono">$7,279.50</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-25 09:45</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>TSLA</strong></td>
+                        <td>Tesla Inc.</td>
+                        <td>42</td>
+                        <td class="mono">$265.75</td>
+                        <td class="mono">$11,161.50</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-23 15:20</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>AAPL</strong></td>
+                        <td>Apple Inc.</td>
+                        <td>125</td>
+                        <td class="mono">$172.50</td>
+                        <td class="mono">$21,562.50</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-22 10:08</td>
+                        <td><span class="transaction-badge sell">SELL</span></td>
+                        <td><strong>DIS</strong></td>
+                        <td>The Walt Disney Company</td>
+                        <td>88</td>
+                        <td class="mono">$112.40</td>
+                        <td class="mono">$9,891.20</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-20 13:42</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>MSFT</strong></td>
+                        <td>Microsoft Corporation</td>
+                        <td>87</td>
+                        <td class="mono">$405.20</td>
+                        <td class="mono">$35,252.40</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-18 11:30</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>GOOGL</strong></td>
+                        <td>Alphabet Inc.</td>
+                        <td>54</td>
+                        <td class="mono">$145.80</td>
+                        <td class="mono">$7,873.20</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-15 14:55</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>AMZN</strong></td>
+                        <td>Amazon.com Inc.</td>
+                        <td>38</td>
+                        <td class="mono">$168.30</td>
+                        <td class="mono">$6,395.40</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-12 09:20</td>
+                        <td><span class="transaction-badge sell">SELL</span></td>
+                        <td><strong>NFLX</strong></td>
+                        <td>Netflix Inc.</td>
+                        <td>22</td>
+                        <td class="mono">$642.15</td>
+                        <td class="mono">$14,127.30</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td class="mono">2026-01-10 16:05</td>
+                        <td><span class="transaction-badge buy">BUY</span></td>
+                        <td><strong>NVDA</strong></td>
+                        <td>NVIDIA Corporation</td>
+                        <td>70</td>
+                        <td class="mono">$505.80</td>
+                        <td class="mono">$35,406.00</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="pagination-btn" disabled>Previous</button>
+            <div class="pagination-info">Page 1 of 8</div>
+            <button class="pagination-btn">Next</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.transaction-filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filter-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.filter-select,
+.filter-input {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    padding: var(--space-md);
+    border-radius: 6px;
+    font-size: 0.9375rem;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+    outline: none;
+    border-color: var(--accent-focus);
+}
+
+.transaction-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.transaction-badge.buy {
+    background-color: var(--accent-gain-muted);
+    color: var(--accent-gain);
+}
+
+.transaction-badge.sell {
+    background-color: var(--accent-loss-muted);
+    color: var(--accent-loss);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.completed {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-sm {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-lg);
+    margin-top: var(--space-lg);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.pagination-btn {
+    padding: var(--space-sm) var(--space-lg);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: var(--bg-elevated);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 1024px) {
+    .transaction-filters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+{% endblock %}

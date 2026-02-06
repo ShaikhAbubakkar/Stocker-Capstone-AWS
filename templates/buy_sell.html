@@ -1,0 +1,618 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Buy/Sell Stocks - Stocker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Trade Stocks</h1>
+    <p class="page-subtitle">Execute buy and sell orders with real-time pricing</p>
+</div>
+
+<div class="grid-2">
+    <!-- Left Column: Stock Search & Info -->
+    <div class="stock-search-panel">
+        <div class="card mb-lg">
+            <div class="card-header">
+                <h2 class="card-title">Stock Lookup</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="stock-search" class="form-label">Search by symbol or company name</label>
+                    <input 
+                        type="text" 
+                        id="stock-search" 
+                        class="form-input" 
+                        placeholder="e.g., AAPL, Apple"
+                        autocomplete="off"
+                    >
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stock Details -->
+        <div class="card">
+            <div class="card-header">
+                <div class="flex-between">
+                    <div>
+                        <h2 class="card-title stock-symbol">AAPL</h2>
+                        <p class="stock-company">Apple Inc.</p>
+                    </div>
+                    <div class="stock-price-header">
+                        <div class="stock-current-price">$178.42</div>
+                        <div class="stock-price-change positive">+$3.24 (+1.85%)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Mini Chart -->
+                <div class="mini-chart-container">
+                    <canvas id="stockMiniChart"></canvas>
+                </div>
+                
+                <!-- Stock Stats -->
+                <div class="stock-stats">
+                    <div class="stock-stat">
+                        <span class="stat-label">Open</span>
+                        <span class="stat-value">$175.18</span>
+                    </div>
+                    <div class="stock-stat">
+                        <span class="stat-label">High</span>
+                        <span class="stat-value">$179.52</span>
+                    </div>
+                    <div class="stock-stat">
+                        <span class="stat-label">Low</span>
+                        <span class="stat-value">$174.85</span>
+                    </div>
+                    <div class="stock-stat">
+                        <span class="stat-label">Volume</span>
+                        <span class="stat-value">52.4M</span>
+                    </div>
+                    <div class="stock-stat">
+                        <span class="stat-label">Mkt Cap</span>
+                        <span class="stat-value">$2.78T</span>
+                    </div>
+                    <div class="stock-stat">
+                        <span class="stat-label">P/E Ratio</span>
+                        <span class="stat-value">29.45</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Trade Execution -->
+    <div class="trade-panel">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Execute Trade</h2>
+            </div>
+            <div class="card-body">
+                <!-- Buy/Sell Toggle -->
+                <div class="trade-toggle">
+                    <button class="trade-toggle-btn active buy">Buy</button>
+                    <button class="trade-toggle-btn sell">Sell</button>
+                </div>
+                
+                <!-- Trade Form -->
+                <form class="trade-form">
+                    <div class="form-group">
+                        <label for="order-type" class="form-label">Order Type</label>
+                        <select id="order-type" class="form-select">
+                            <option value="market">Market Order</option>
+                            <option value="limit">Limit Order</option>
+                            <option value="stop">Stop Order</option>
+                            <option value="stop-limit">Stop-Limit Order</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity" class="form-label">Quantity (Shares)</label>
+                        <input 
+                            type="number" 
+                            id="quantity" 
+                            class="form-input" 
+                            placeholder="0"
+                            min="1"
+                            value="10"
+                        >
+                    </div>
+                    
+                    <div class="form-group limit-price-group" style="display: none;">
+                        <label for="limit-price" class="form-label">Limit Price</label>
+                        <input 
+                            type="number" 
+                            id="limit-price" 
+                            class="form-input" 
+                            placeholder="0.00"
+                            step="0.01"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="time-in-force" class="form-label">Time in Force</label>
+                        <select id="time-in-force" class="form-select">
+                            <option value="day">Day</option>
+                            <option value="gtc">Good 'Til Canceled</option>
+                            <option value="ioc">Immediate or Cancel</option>
+                            <option value="fok">Fill or Kill</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <div class="summary-row">
+                            <span class="summary-label">Estimated Cost</span>
+                            <span class="summary-value">$1,784.20</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Commission</span>
+                            <span class="summary-value">$0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total</span>
+                            <span class="summary-value">$1,784.20</span>
+                        </div>
+                    </div>
+                    
+                    <div class="buying-power">
+                        <span class="buying-power-label">Cash Available</span>
+                        <span class="buying-power-value">$28,450.00</span>
+                    </div>
+                    
+                    <button type="button" class="btn btn-success btn-block" id="place-order-btn">
+                        Review Buy Order
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Recent Trades -->
+        <div class="card mt-lg">
+            <div class="card-header">
+                <h2 class="card-title">Recent Trades</h2>
+            </div>
+            <div class="card-body">
+                <div class="recent-trades-list">
+                    <div class="recent-trade">
+                        <div class="trade-action buy-action">BUY</div>
+                        <div class="trade-details">
+                            <div class="trade-symbol">NVDA</div>
+                            <div class="trade-info">25 shares @ $548.20</div>
+                        </div>
+                        <div class="trade-time">2 hours ago</div>
+                    </div>
+                    <div class="recent-trade">
+                        <div class="trade-action sell-action">SELL</div>
+                        <div class="trade-details">
+                            <div class="trade-symbol">META</div>
+                            <div class="trade-info">15 shares @ $485.30</div>
+                        </div>
+                        <div class="trade-time">Yesterday</div>
+                    </div>
+                    <div class="recent-trade">
+                        <div class="trade-action buy-action">BUY</div>
+                        <div class="trade-details">
+                            <div class="trade-symbol">TSLA</div>
+                            <div class="trade-info">42 shares @ $265.75</div>
+                        </div>
+                        <div class="trade-time">3 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Confirmation Modal -->
+<div class="modal" id="order-modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Confirm Order</h2>
+        </div>
+        <div class="modal-body">
+            <p class="modal-description">Please review your order details before submitting.</p>
+            
+            <div class="order-confirmation">
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Action</span>
+                    <span class="confirmation-value buy-text">BUY</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Symbol</span>
+                    <span class="confirmation-value">AAPL</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Quantity</span>
+                    <span class="confirmation-value">10 shares</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Order Type</span>
+                    <span class="confirmation-value">Market Order</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Estimated Price</span>
+                    <span class="confirmation-value">$178.42 per share</span>
+                </div>
+                <div class="confirmation-row total">
+                    <span class="confirmation-label">Total Cost</span>
+                    <span class="confirmation-value">$1,784.20</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancel-order">Cancel</button>
+            <button class="btn btn-success" id="confirm-order">Confirm Purchase</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.stock-company {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: var(--space-xs);
+}
+
+.stock-price-header {
+    text-align: right;
+}
+
+.stock-current-price {
+    font-size: 1.875rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    margin-bottom: var(--space-xs);
+}
+
+.stock-price-change {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.stock-price-change.positive {
+    color: var(--accent-gain);
+}
+
+.stock-price-change.negative {
+    color: var(--accent-loss);
+}
+
+.mini-chart-container {
+    height: 200px;
+    margin: var(--space-lg) 0;
+}
+
+.stock-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.stock-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+/* Trade Panel */
+.trade-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xl);
+}
+
+.trade-toggle-btn {
+    padding: var(--space-md);
+    border: 1px solid var(--border-default);
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.trade-toggle-btn.active.buy {
+    background-color: var(--accent-gain);
+    border-color: var(--accent-gain);
+    color: white;
+}
+
+.trade-toggle-btn.active.sell {
+    background-color: var(--accent-loss);
+    border-color: var(--accent-loss);
+    color: white;
+}
+
+.order-summary {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    font-size: 0.9375rem;
+}
+
+.summary-row.total {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-default);
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.summary-label {
+    color: var(--text-secondary);
+}
+
+.summary-value {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.buying-power {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background-color: var(--bg-primary);
+    border-radius: 6px;
+    margin-bottom: var(--space-lg);
+    font-size: 0.875rem;
+}
+
+.buying-power-label {
+    color: var(--text-secondary);
+}
+
+.buying-power-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Recent Trades */
+.recent-trades-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.recent-trade {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background-color: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+.trade-action {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.buy-action {
+    background-color: var(--accent-gain-muted);
+    color: var(--accent-gain);
+}
+
+.sell-action {
+    background-color: var(--accent-loss-muted);
+    color: var(--accent-loss);
+}
+
+.trade-details {
+    flex: 1;
+}
+
+.trade-symbol {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-xs);
+}
+
+.trade-info {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.trade-time {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    z-index: 1001;
+}
+
+.modal-header {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: var(--space-xl);
+}
+
+.modal-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+.order-confirmation {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: var(--space-lg);
+}
+
+.confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+    font-size: 0.9375rem;
+}
+
+.confirmation-row.total {
+    margin-top: var(--space-sm);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-default);
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.confirmation-label {
+    color: var(--text-secondary);
+}
+
+.confirmation-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.buy-text {
+    color: var(--accent-gain);
+}
+
+.modal-footer {
+    padding: var(--space-xl);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: var(--space-md);
+    justify-content: flex-end;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Mini Stock Chart
+const miniCtx = document.getElementById('stockMiniChart');
+new Chart(miniCtx, {
+    type: 'line',
+    data: {
+        labels: Array(30).fill(''),
+        datasets: [{
+            data: [175, 176, 175.5, 177, 178, 177.5, 179, 178.5, 180, 179, 178, 177.5, 178, 179, 178.5, 177, 176.5, 177, 178, 179.5, 180, 179, 178, 177.5, 178, 179, 180, 179.5, 178.5, 178.42],
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: false,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { display: false },
+            y: { display: false }
+        }
+    }
+});
+
+// Order Type Change Handler
+document.getElementById('order-type').addEventListener('change', function() {
+    const limitPriceGroup = document.querySelector('.limit-price-group');
+    if (this.value === 'limit' || this.value === 'stop-limit') {
+        limitPriceGroup.style.display = 'block';
+    } else {
+        limitPriceGroup.style.display = 'none';
+    }
+});
+
+// Trade Toggle
+const buyBtn = document.querySelector('.trade-toggle-btn.buy');
+const sellBtn = document.querySelector('.trade-toggle-btn.sell');
+const placeOrderBtn = document.getElementById('place-order-btn');
+
+buyBtn.addEventListener('click', function() {
+    buyBtn.classList.add('active');
+    sellBtn.classList.remove('active');
+    placeOrderBtn.textContent = 'Review Buy Order';
+    placeOrderBtn.className = 'btn btn-success btn-block';
+});
+
+sellBtn.addEventListener('click', function() {
+    sellBtn.classList.add('active');
+    buyBtn.classList.remove('active');
+    placeOrderBtn.textContent = 'Review Sell Order';
+    placeOrderBtn.className = 'btn btn-danger btn-block';
+});
+
+// Modal Handlers
+placeOrderBtn.addEventListener('click', function() {
+    document.getElementById('order-modal').style.display = 'flex';
+});
+
+document.getElementById('cancel-order').addEventListener('click', function() {
+    document.getElementById('order-modal').style.display = 'none';
+});
+
+document.getElementById('confirm-order').addEventListener('click', function() {
+    alert('Order submitted successfully!');
+    document.getElementById('order-modal').style.display = 'none';
+});
+</script>
+{% endblock %}

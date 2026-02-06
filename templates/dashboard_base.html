@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard - Stocker{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{{ url_for('dashboard') }}" class="navbar-logo">Stocker</a>
+            <ul class="navbar-menu">
+                <li><a href="{{ url_for('logout') }}" class="navbar-link">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="{{ url_for('dashboard') }}" class="sidebar-link {% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+            <li><a href="{{ url_for('buy_sell') }}" class="sidebar-link {% if request.endpoint == 'buy_sell' %}active{% endif %}">Buy / Sell</a></li>
+            <li><a href="{{ url_for('portfolio') }}" class="sidebar-link {% if request.endpoint == 'portfolio' %}active{% endif %}">Portfolio</a></li>
+            <li><a href="{{ url_for('transactions') }}" class="sidebar-link {% if request.endpoint == 'transactions' %}active{% endif %}">Transactions</a></li>
+            <li><a href="{{ url_for('settings') }}" class="sidebar-link {% if request.endpoint == 'settings' %}active{% endif %}">Settings</a></li>
+            <li><a href="{{ url_for('admin') }}" class="sidebar-link {% if request.endpoint == 'admin' %}active{% endif %}">Admin</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

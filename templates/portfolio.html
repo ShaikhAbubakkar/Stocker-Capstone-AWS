@@ -1,0 +1,307 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Portfolio - Stocker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Portfolio Details</h1>
+    <p class="page-subtitle">Comprehensive view of all holdings and performance metrics</p>
+</div>
+
+<!-- Portfolio Summary -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">Total Value</div>
+        <div class="metric-value">$142,847.92</div>
+        <div class="metric-change positive">+2.34% today</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Total Cost Basis</div>
+        <div class="metric-value">$128,562.00</div>
+        <div class="metric-change text-muted">Original investment</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Total Gain/Loss</div>
+        <div class="metric-value text-gain">+$14,285.92</div>
+        <div class="metric-change positive">+11.11%</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Annualized Return</div>
+        <div class="metric-value">18.4%</div>
+        <div class="metric-change text-muted">vs. S&P 500: 12.8%</div>
+    </div>
+</div>
+
+<!-- Holdings Table -->
+<div class="card mb-xl">
+    <div class="card-header">
+        <div class="flex-between">
+            <h2 class="card-title">All Holdings</h2>
+            <div class="table-actions">
+                <select class="table-filter">
+                    <option value="all">All Positions</option>
+                    <option value="gainers">Gainers Only</option>
+                    <option value="losers">Losers Only</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Company</th>
+                        <th>Shares</th>
+                        <th>Avg Cost</th>
+                        <th>Current Price</th>
+                        <th>Market Value</th>
+                        <th>Gain/Loss</th>
+                        <th>Return %</th>
+                        <th>Portfolio %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>NVDA</strong></td>
+                        <td>NVIDIA Corporation</td>
+                        <td>95</td>
+                        <td class="mono">$520.45</td>
+                        <td class="mono">$548.20</td>
+                        <td class="mono">$52,079.00</td>
+                        <td class="text-gain mono">+$2,636.25</td>
+                        <td class="text-gain">+5.33%</td>
+                        <td>36.5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MSFT</strong></td>
+                        <td>Microsoft Corporation</td>
+                        <td>87</td>
+                        <td class="mono">$405.20</td>
+                        <td class="mono">$412.35</td>
+                        <td class="mono">$35,874.45</td>
+                        <td class="text-gain mono">+$621.05</td>
+                        <td class="text-gain">+1.76%</td>
+                        <td>25.1%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AAPL</strong></td>
+                        <td>Apple Inc.</td>
+                        <td>125</td>
+                        <td class="mono">$172.50</td>
+                        <td class="mono">$178.42</td>
+                        <td class="mono">$22,302.50</td>
+                        <td class="text-gain mono">+$740.00</td>
+                        <td class="text-gain">+3.43%</td>
+                        <td>15.6%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TSLA</strong></td>
+                        <td>Tesla Inc.</td>
+                        <td>42</td>
+                        <td class="mono">$248.90</td>
+                        <td class="mono">$265.75</td>
+                        <td class="mono">$11,161.50</td>
+                        <td class="text-gain mono">+$707.70</td>
+                        <td class="text-gain">+6.77%</td>
+                        <td>7.8%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GOOGL</strong></td>
+                        <td>Alphabet Inc.</td>
+                        <td>54</td>
+                        <td class="mono">$145.80</td>
+                        <td class="mono">$142.18</td>
+                        <td class="mono">$7,677.72</td>
+                        <td class="text-loss mono">-$195.48</td>
+                        <td class="text-loss">-2.48%</td>
+                        <td>5.4%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AMZN</strong></td>
+                        <td>Amazon.com Inc.</td>
+                        <td>38</td>
+                        <td class="mono">$168.30</td>
+                        <td class="mono">$172.85</td>
+                        <td class="mono">$6,568.30</td>
+                        <td class="text-gain mono">+$172.90</td>
+                        <td class="text-gain">+2.70%</td>
+                        <td>4.6%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>META</strong></td>
+                        <td>Meta Platforms Inc.</td>
+                        <td>15</td>
+                        <td class="mono">$478.60</td>
+                        <td class="mono">$485.30</td>
+                        <td class="mono">$7,279.50</td>
+                        <td class="text-gain mono">+$100.50</td>
+                        <td class="text-gain">+1.40%</td>
+                        <td>5.1%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Sector Allocation -->
+<div class="grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Sector Allocation</h2>
+        </div>
+        <div class="card-body">
+            <div class="allocation-list">
+                <div class="allocation-item">
+                    <div class="allocation-header">
+                        <span class="allocation-label">Technology</span>
+                        <span class="allocation-percentage">72.3%</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <div class="allocation-fill" style="width: 72.3%;"></div>
+                    </div>
+                </div>
+                <div class="allocation-item">
+                    <div class="allocation-header">
+                        <span class="allocation-label">Consumer Cyclical</span>
+                        <span class="allocation-percentage">18.4%</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <div class="allocation-fill" style="width: 18.4%;"></div>
+                    </div>
+                </div>
+                <div class="allocation-item">
+                    <div class="allocation-header">
+                        <span class="allocation-label">Communication Services</span>
+                        <span class="allocation-percentage">9.3%</span>
+                    </div>
+                    <div class="allocation-bar">
+                        <div class="allocation-fill" style="width: 9.3%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Performance Metrics</h2>
+        </div>
+        <div class="card-body">
+            <div class="performance-metrics">
+                <div class="performance-item">
+                    <span class="performance-label">Sharpe Ratio</span>
+                    <span class="performance-value">1.82</span>
+                </div>
+                <div class="performance-item">
+                    <span class="performance-label">Beta</span>
+                    <span class="performance-value">1.15</span>
+                </div>
+                <div class="performance-item">
+                    <span class="performance-label">Max Drawdown</span>
+                    <span class="performance-value text-loss">-12.4%</span>
+                </div>
+                <div class="performance-item">
+                    <span class="performance-label">Volatility (Annual)</span>
+                    <span class="performance-value">24.8%</span>
+                </div>
+                <div class="performance-item">
+                    <span class="performance-label">Win Rate</span>
+                    <span class="performance-value">68.2%</span>
+                </div>
+                <div class="performance-item">
+                    <span class="performance-label">Avg. Holding Period</span>
+                    <span class="performance-value">45 days</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.table-filter {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.allocation-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.allocation-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.allocation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.allocation-label {
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+}
+
+.allocation-percentage {
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+}
+
+.allocation-bar {
+    height: 8px;
+    background-color: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.allocation-fill {
+    height: 100%;
+    background-color: var(--accent-focus);
+    transition: width var(--transition-slow);
+}
+
+.performance-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+}
+
+.performance-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background-color: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+.performance-label {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+}
+
+.performance-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+</style>
+{% endblock %}

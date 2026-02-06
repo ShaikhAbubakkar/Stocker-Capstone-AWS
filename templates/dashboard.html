@@ -1,0 +1,284 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Dashboard - Stocker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Portfolio Overview</h1>
+    <p class="page-subtitle">Real-time portfolio performance and holdings</p>
+</div>
+
+<!-- Portfolio Metrics -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">Total Value</div>
+        <div class="metric-value">$142,847.92</div>
+        <div class="metric-change positive">+$3,247.12 (+2.34%)</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Day's Gain/Loss</div>
+        <div class="metric-value">+$3,247.12</div>
+        <div class="metric-change positive">+2.34%</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Cash Available</div>
+        <div class="metric-value">$28,450.00</div>
+        <div class="metric-change text-muted">Buying power</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Total Positions</div>
+        <div class="metric-value">12</div>
+        <div class="metric-change text-muted">Active holdings</div>
+    </div>
+</div>
+
+<!-- Portfolio Chart -->
+<div class="card mb-xl">
+    <div class="card-header">
+        <div class="flex-between">
+            <h2 class="card-title">Portfolio Performance</h2>
+            <div class="chart-timeframe">
+                <button class="timeframe-btn">1D</button>
+                <button class="timeframe-btn">1W</button>
+                <button class="timeframe-btn active">1M</button>
+                <button class="timeframe-btn">3M</button>
+                <button class="timeframe-btn">1Y</button>
+                <button class="timeframe-btn">ALL</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="chart-container">
+            <canvas id="portfolioChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Holdings Table -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Current Holdings</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Company</th>
+                        <th>Shares</th>
+                        <th>Avg Cost</th>
+                        <th>Current Price</th>
+                        <th>Market Value</th>
+                        <th>Gain/Loss</th>
+                        <th>Return %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>AAPL</strong></td>
+                        <td>Apple Inc.</td>
+                        <td>125</td>
+                        <td class="mono">$172.50</td>
+                        <td class="mono">$178.42</td>
+                        <td class="mono">$22,302.50</td>
+                        <td class="text-gain mono">+$740.00</td>
+                        <td class="text-gain">+3.43%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MSFT</strong></td>
+                        <td>Microsoft Corporation</td>
+                        <td>87</td>
+                        <td class="mono">$405.20</td>
+                        <td class="mono">$412.35</td>
+                        <td class="mono">$35,874.45</td>
+                        <td class="text-gain mono">+$621.05</td>
+                        <td class="text-gain">+1.76%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GOOGL</strong></td>
+                        <td>Alphabet Inc.</td>
+                        <td>54</td>
+                        <td class="mono">$145.80</td>
+                        <td class="mono">$142.18</td>
+                        <td class="mono">$7,677.72</td>
+                        <td class="text-loss mono">-$195.48</td>
+                        <td class="text-loss">-2.48%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TSLA</strong></td>
+                        <td>Tesla Inc.</td>
+                        <td>42</td>
+                        <td class="mono">$248.90</td>
+                        <td class="mono">$265.75</td>
+                        <td class="mono">$11,161.50</td>
+                        <td class="text-gain mono">+$707.70</td>
+                        <td class="text-gain">+6.77%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NVDA</strong></td>
+                        <td>NVIDIA Corporation</td>
+                        <td>95</td>
+                        <td class="mono">$520.45</td>
+                        <td class="mono">$548.20</td>
+                        <td class="mono">$52,079.00</td>
+                        <td class="text-gain mono">+$2,636.25</td>
+                        <td class="text-gain">+5.33%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AMZN</strong></td>
+                        <td>Amazon.com Inc.</td>
+                        <td>38</td>
+                        <td class="mono">$168.30</td>
+                        <td class="mono">$172.85</td>
+                        <td class="mono">$6,568.30</td>
+                        <td class="text-gain mono">+$172.90</td>
+                        <td class="text-gain">+2.70%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.chart-container {
+    height: 400px;
+    padding: var(--space-lg) 0;
+}
+
+.chart-timeframe {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.timeframe-btn {
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.timeframe-btn:hover {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.timeframe-btn.active {
+    background-color: var(--accent-focus);
+    color: white;
+    border-color: var(--accent-focus);
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+}
+
+#portfolioChart {
+    width: 100%;
+    height: 100%;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Portfolio Chart
+const ctx = document.getElementById('portfolioChart');
+
+const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+gradient.addColorStop(0, 'rgba(34, 197, 94, 0.1)');
+gradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan 1', 'Jan 5', 'Jan 10', 'Jan 15', 'Jan 20', 'Jan 25', 'Jan 28'],
+        datasets: [{
+            label: 'Portfolio Value',
+            data: [135000, 137200, 136800, 139500, 141200, 140800, 142847.92],
+            borderColor: '#22c55e',
+            backgroundColor: gradient,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            pointHoverBackgroundColor: '#22c55e',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: '#18181b',
+                titleColor: '#e4e4e7',
+                bodyColor: '#a1a1aa',
+                borderColor: '#27272a',
+                borderWidth: 1,
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                    label: function(context) {
+                        return '$' + context.parsed.y.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: '#27272a',
+                    drawBorder: false
+                },
+                ticks: {
+                    color: '#71717a',
+                    font: {
+                        size: 11
+                    }
+                }
+            },
+            y: {
+                grid: {
+                    color: '#27272a',
+                    drawBorder: false
+                },
+                ticks: {
+                    color: '#71717a',
+                    font: {
+                        size: 11
+                    },
+                    callback: function(value) {
+                        return '$' + (value / 1000) + 'k';
+                    }
+                }
+            }
+        },
+        interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+        }
+    }
+});
+</script>
+{% endblock %}

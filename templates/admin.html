@@ -1,0 +1,391 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Admin Panel - Stocker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-subtitle">System oversight and user management</p>
+</div>
+
+<!-- Admin Metrics -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">Total Users</div>
+        <div class="metric-value">2,847</div>
+        <div class="metric-change positive">+124 this month</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Active Sessions</div>
+        <div class="metric-value">1,453</div>
+        <div class="metric-change text-muted">Currently online</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Total Trades Today</div>
+        <div class="metric-value">8,247</div>
+        <div class="metric-change positive">+18.4% vs yesterday</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">System Status</div>
+        <div class="metric-value">
+            <span class="status-indicator online"></span> Operational
+        </div>
+        <div class="metric-change text-muted">99.98% uptime</div>
+    </div>
+</div>
+
+<!-- User Management -->
+<div class="card mb-xl">
+    <div class="card-header">
+        <div class="flex-between">
+            <h2 class="card-title">User Management</h2>
+            <div class="admin-actions">
+                <input type="text" class="admin-search" placeholder="Search users...">
+                <button class="btn btn-primary btn-sm">Add User</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Portfolio Value</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="mono">#12847</td>
+                        <td>John Smith</td>
+                        <td>john.smith@example.com</td>
+                        <td><span class="status-badge active">Active</span></td>
+                        <td class="mono">$142,847.92</td>
+                        <td>2025-03-15</td>
+                        <td>
+                            <button class="action-btn">View</button>
+                            <button class="action-btn">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mono">#12846</td>
+                        <td>Sarah Johnson</td>
+                        <td>sarah.j@example.com</td>
+                        <td><span class="status-badge active">Active</span></td>
+                        <td class="mono">$89,234.15</td>
+                        <td>2025-06-22</td>
+                        <td>
+                            <button class="action-btn">View</button>
+                            <button class="action-btn">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mono">#12845</td>
+                        <td>Michael Chen</td>
+                        <td>m.chen@example.com</td>
+                        <td><span class="status-badge suspended">Suspended</span></td>
+                        <td class="mono">$0.00</td>
+                        <td>2025-01-08</td>
+                        <td>
+                            <button class="action-btn">View</button>
+                            <button class="action-btn">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mono">#12844</td>
+                        <td>Emily Rodriguez</td>
+                        <td>emily.r@example.com</td>
+                        <td><span class="status-badge active">Active</span></td>
+                        <td class="mono">$256,421.88</td>
+                        <td>2024-11-30</td>
+                        <td>
+                            <button class="action-btn">View</button>
+                            <button class="action-btn">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="mono">#12843</td>
+                        <td>David Kim</td>
+                        <td>d.kim@example.com</td>
+                        <td><span class="status-badge inactive">Inactive</span></td>
+                        <td class="mono">$12,500.00</td>
+                        <td>2025-08-14</td>
+                        <td>
+                            <button class="action-btn">View</button>
+                            <button class="action-btn">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- System Activity -->
+<div class="grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Recent Transactions</h2>
+        </div>
+        <div class="card-body">
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon buy">BUY</div>
+                    <div class="activity-details">
+                        <div class="activity-user">John Smith</div>
+                        <div class="activity-description">Purchased 25 shares of NVDA @ $548.20</div>
+                    </div>
+                    <div class="activity-time">2 min ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon sell">SELL</div>
+                    <div class="activity-details">
+                        <div class="activity-user">Emily Rodriguez</div>
+                        <div class="activity-description">Sold 50 shares of AAPL @ $178.42</div>
+                    </div>
+                    <div class="activity-time">8 min ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon buy">BUY</div>
+                    <div class="activity-details">
+                        <div class="activity-user">Sarah Johnson</div>
+                        <div class="activity-description">Purchased 100 shares of MSFT @ $412.35</div>
+                    </div>
+                    <div class="activity-time">15 min ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon sell">SELL</div>
+                    <div class="activity-details">
+                        <div class="activity-user">David Kim</div>
+                        <div class="activity-description">Sold 75 shares of TSLA @ $265.75</div>
+                    </div>
+                    <div class="activity-time">22 min ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">System Logs</h2>
+        </div>
+        <div class="card-body">
+            <div class="log-list">
+                <div class="log-item">
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">Database backup completed successfully</span>
+                    <span class="log-time">14:32</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-level success">SUCCESS</span>
+                    <span class="log-message">Market data sync completed</span>
+                    <span class="log-time">14:15</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-level warning">WARNING</span>
+                    <span class="log-message">High server load detected: 87%</span>
+                    <span class="log-time">13:48</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">124 new user registrations processed</span>
+                    <span class="log-time">13:30</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-level error">ERROR</span>
+                    <span class="log-message">Failed login attempt from IP 192.168.1.105</span>
+                    <span class="log-time">13:22</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-actions {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.admin-search {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    min-width: 240px;
+}
+
+.admin-search:focus {
+    outline: none;
+    border-color: var(--accent-focus);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: var(--space-xs);
+}
+
+.status-indicator.online {
+    background-color: var(--accent-gain);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background-color: var(--accent-gain-muted);
+    color: var(--accent-gain);
+}
+
+.status-badge.inactive {
+    background-color: var(--bg-elevated);
+    color: var(--text-tertiary);
+}
+
+.status-badge.suspended {
+    background-color: var(--accent-loss-muted);
+    color: var(--accent-loss);
+}
+
+.action-btn {
+    padding: var(--space-xs) var(--space-md);
+    background-color: transparent;
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: var(--space-xs);
+    transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Activity List */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background-color: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+.activity-icon {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+.activity-icon.buy {
+    background-color: var(--accent-gain-muted);
+    color: var(--accent-gain);
+}
+
+.activity-icon.sell {
+    background-color: var(--accent-loss-muted);
+    color: var(--accent-loss);
+}
+
+.activity-details {
+    flex: 1;
+}
+
+.activity-user {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-xs);
+}
+
+.activity-description {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.activity-time {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+/* Log List */
+.log-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 60px;
+    gap: var(--space-md);
+    padding: var(--space-sm);
+    font-size: 0.8125rem;
+    font-family: var(--font-mono);
+    background-color: var(--bg-tertiary);
+    border-radius: 4px;
+    align-items: center;
+}
+
+.log-level {
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.log-level.info {
+    color: var(--accent-focus);
+}
+
+.log-level.success {
+    color: var(--accent-gain);
+}
+
+.log-level.warning {
+    color: #f59e0b;
+}
+
+.log-level.error {
+    color: var(--accent-loss);
+}
+
+.log-message {
+    color: var(--text-secondary);
+}
+
+.log-time {
+    color: var(--text-tertiary);
+    text-align: right;
+}
+</style>
+{% endblock %}
