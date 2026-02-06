@@ -572,6 +572,70 @@ new Chart(miniCtx, {
     }
 });
 
+// Stock Search Handler
+document.getElementById('stock-search').addEventListener('input', async function(e) {
+    const query = e.target.value.trim();
+    if (query.length < 1) return;
+    
+    try {
+        const response = await fetch(`/api/stocks/search?q=${encodeURIComponent(query)}`);
+        const stocks = await response.json();
+        // Could show dropdown, but for now just display first result
+        if (stocks.length > 0) {
+            loadStock(stocks[0].symbol);
+        }
+    } catch (err) {
+        console.error('Search error:', err);
+    }
+});
+
+// Load Stock Details
+async function loadStock(symbol) {
+    try {
+        const response = await fetch(`/api/stocks/${symbol}`);
+        const stock = await response.json();
+        
+        if (stock.error) {
+            alert('Stock not found');
+            return;
+        }
+        
+        // Update stock display
+        document.querySelector('.stock-symbol').textContent = stock.symbol;
+        document.querySelector('.stock-company').textContent = stock.name;
+        document.querySelector('.stock-current-price').textContent = `$${stock.price.toFixed(2)}`;
+        
+        const changeClass = stock.change >= 0 ? 'positive' : 'negative';
+        document.querySelector('.stock-price-change').textContent = 
+            `${stock.change >= 0 ? '+' : ''}$${stock.change.toFixed(2)} (${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%)`;
+        document.querySelector('.stock-price-change').className = `stock-price-change ${changeClass}`;
+        
+        // Update stats
+        const stats = document.querySelectorAll('.stock-stat');
+        const statValues = [
+            stock.open,
+            stock.high,
+            stock.low,
+            stock.volume,
+            stock.market_cap,
+            stock.pe_ratio
+        ];
+        
+        stats.forEach((stat, index) => {
+            stat.querySelector('.stat-value').textContent = 
+                index < 3 ? `$${statValues[index].toFixed(2)}` : String(statValues[index]);
+        });
+        
+        // Store current symbol for trade
+        window.currentStock = stock;
+    } catch (err) {
+        console.error('Load stock error:', err);
+    }
+}
+
+// Load initial stock (AAPL)
+loadStock('AAPL');
+
 // Order Type Change Handler
 document.getElementById('order-type').addEventListener('change', function() {
     const limitPriceGroup = document.querySelector('.limit-price-group');
@@ -587,9 +651,12 @@ const buyBtn = document.querySelector('.trade-toggle-btn.buy');
 const sellBtn = document.querySelector('.trade-toggle-btn.sell');
 const placeOrderBtn = document.getElementById('place-order-btn');
 
+let currentAction = 'buy';
+
 buyBtn.addEventListener('click', function() {
     buyBtn.classList.add('active');
     sellBtn.classList.remove('active');
+    currentAction = 'buy';
     placeOrderBtn.textContent = 'Review Buy Order';
     placeOrderBtn.className = 'btn btn-success btn-block';
 });
@@ -597,12 +664,32 @@ buyBtn.addEventListener('click', function() {
 sellBtn.addEventListener('click', function() {
     sellBtn.classList.add('active');
     buyBtn.classList.remove('active');
+    currentAction = 'sell';
     placeOrderBtn.textContent = 'Review Sell Order';
     placeOrderBtn.className = 'btn btn-danger btn-block';
 });
 
 // Modal Handlers
 placeOrderBtn.addEventListener('click', function() {
+    if (!window.currentStock) {
+        alert('Please select a stock first');
+        return;
+    }
+    
+    const quantity = document.getElementById('quantity').value;
+    if (!quantity || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+    
+    // Update modal with order details
+    const total = window.currentStock.price * quantity;
+    document.getElementById('modal-symbol').textContent = window.currentStock.symbol;
+    document.getElementById('modal-action').textContent = currentAction.toUpperCase();
+    document.getElementById('modal-quantity').textContent = quantity;
+    document.getElementById('modal-price').textContent = `$${window.currentStock.price.toFixed(2)}`;
+    document.getElementById('modal-total').textContent = `$${total.toFixed(2)}`;
+    
     document.getElementById('order-modal').style.display = 'flex';
 });
 
@@ -610,9 +697,55 @@ document.getElementById('cancel-order').addEventListener('click', function() {
     document.getElementById('order-modal').style.display = 'none';
 });
 
-document.getElementById('confirm-order').addEventListener('click', function() {
-    alert('Order submitted successfully!');
-    document.getElementById('order-modal').style.display = 'none';
+document.getElementById('confirm-order').addEventListener('click', async function() {
+    const quantity = document.getElementById('quantity').value;
+    const orderType = document.getElementById('order-type').value;
+    
+    try {
+        const response = await fetch('/api/trade', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('input[name="csrf_token"]')?.value || ''
+            },
+            body: JSON.stringify({
+                symbol: window.currentStock.symbol,
+                action: currentAction,
+                quantity: parseInt(quantity),
+                order_type: orderType
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`${result.message}\n\nCash Balance: $${result.details.cash_balance.toFixed(2)}`);
+            document.getElementById('quantity').value = '';
+            document.getElementById('order-modal').style.display = 'none';
+            loadPortfolioSummary();
+        } else {
+            alert(`Error: ${result.error}`);
+        }
+    } catch (err) {
+        console.error('Trade error:', err);
+        alert('Failed to execute trade. Please try again.');
+    }
 });
+
+// Load Portfolio Summary
+async function loadPortfolioSummary() {
+    try {
+        const response = await fetch('/api/portfolio/summary');
+        const portfolio = await response.json();
+        
+        // Update portfolio display if needed
+        console.log('Portfolio:', portfolio);
+    } catch (err) {
+        console.error('Portfolio error:', err);
+    }
+}
+
+// Load portfolio on page load
+loadPortfolioSummary();
 </script>
 {% endblock %}

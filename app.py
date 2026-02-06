@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,6 +11,8 @@ import logging
 import boto3
 from dotenv import load_dotenv
 from boto3.dynamodb.conditions import Attr
+from mock_stocks import get_stock, search_stocks, get_all_stocks
+import uuid
 
 # Load environment variables from .env file (for local development only)
 load_dotenv()
@@ -477,6 +479,181 @@ def settings():
 @admin_required
 def admin():
     return render_template('admin.html')
+
+
+# API Routes for Trading
+@app.route('/api/stocks/search')
+@login_required
+def api_search_stocks():
+    """Search stocks by symbol or name"""
+    query = request.args.get('q', '').strip()
+    if not query or len(query) < 1:
+        return jsonify([])
+    
+    results = search_stocks(query)
+    return jsonify(results)
+
+
+@app.route('/api/stocks/<symbol>')
+@login_required
+def api_get_stock(symbol):
+    """Get stock details"""
+    stock = get_stock(symbol)
+    if not stock:
+        return jsonify({'error': 'Stock not found'}), 404
+    return jsonify(stock)
+
+
+@app.route('/api/portfolio/summary')
+@login_required
+def api_portfolio_summary():
+    """Get user's portfolio summary"""
+    user_email = current_user.id
+    try:
+        response = portfolios_table.get_item(Key={'user_id': current_user.user_id})
+        portfolio = response.get('Item', {})
+        
+        holdings = portfolio.get('holdings', {})
+        transactions = portfolio.get('total_transactions', 0)
+        
+        return jsonify({
+            'holdings': holdings,
+            'total_transactions': transactions,
+            'cash_balance': portfolio.get('cash_balance', 10000.00)
+        })
+    except Exception as e:
+        logger.error(f"Portfolio summary error: {str(e)}")
+        return jsonify({'error': 'Failed to fetch portfolio'}), 500
+
+
+@app.route('/api/trade', methods=['POST'])
+@login_required
+def api_execute_trade():
+    """Execute a buy or sell trade"""
+    data = request.get_json()
+    
+    symbol = data.get('symbol', '').upper()
+    action = data.get('action', '').lower()  # 'buy' or 'sell'
+    quantity = data.get('quantity', 0)
+    order_type = data.get('order_type', 'market')
+    
+    # Validate inputs
+    if not symbol or action not in ['buy', 'sell'] or quantity <= 0:
+        return jsonify({'error': 'Invalid trade parameters'}), 400
+    
+    # Get stock info
+    stock = get_stock(symbol)
+    if not stock:
+        return jsonify({'error': 'Stock not found'}), 404
+    
+    price = stock['price']
+    total_cost = price * quantity
+    user_id = current_user.user_id
+    user_email = current_user.id
+    
+    try:
+        # Get or create portfolio
+        portfolio_response = portfolios_table.get_item(Key={'user_id': user_id})
+        portfolio = portfolio_response.get('Item', {
+            'user_id': user_id,
+            'email': user_email,
+            'holdings': {},
+            'cash_balance': 10000.00,
+            'total_transactions': 0,
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        })
+        
+        holdings = portfolio.get('holdings', {})
+        cash_balance = float(portfolio.get('cash_balance', 10000.00))
+        
+        if action == 'buy':
+            # Check if user has enough cash
+            if cash_balance < total_cost:
+                return jsonify({'error': f'Insufficient funds. Need ${total_cost:.2f}, have ${cash_balance:.2f}'}), 400
+            
+            # Update holdings
+            current_qty = int(holdings.get(symbol, 0))
+            holdings[symbol] = str(current_qty + quantity)
+            cash_balance -= total_cost
+            
+        elif action == 'sell':
+            # Check if user has enough shares
+            current_qty = int(holdings.get(symbol, 0))
+            if current_qty < quantity:
+                return jsonify({'error': f'Insufficient shares. Have {current_qty}, trying to sell {quantity}'}), 400
+            
+            # Update holdings
+            holdings[symbol] = str(current_qty - quantity)
+            if holdings[symbol] == '0':
+                del holdings[symbol]
+            cash_balance += total_cost
+        
+        # Update portfolio in DynamoDB
+        portfolios_table.put_item(Item={
+            'user_id': user_id,
+            'email': user_email,
+            'holdings': holdings,
+            'cash_balance': cash_balance,
+            'total_transactions': int(portfolio.get('total_transactions', 0)) + 1,
+            'created_at': portfolio.get('created_at', datetime.utcnow().isoformat()),
+            'updated_at': datetime.utcnow().isoformat()
+        })
+        
+        # Record transaction
+        transaction_id = str(uuid.uuid4())
+        transactions_table.put_item(Item={
+            'transaction_id': transaction_id,
+            'user_id': user_id,
+            'email': user_email,
+            'symbol': symbol,
+            'action': action,
+            'quantity': quantity,
+            'price': price,
+            'total': total_cost,
+            'order_type': order_type,
+            'status': 'completed',
+            'timestamp': datetime.utcnow().isoformat()
+        })
+        
+        logger.info(f"Trade executed: {user_email} - {action.upper()} {quantity} {symbol} @ ${price}")
+        
+        return jsonify({
+            'success': True,
+            'transaction_id': transaction_id,
+            'message': f'{action.upper()} order completed',
+            'details': {
+                'symbol': symbol,
+                'quantity': quantity,
+                'price': price,
+                'total': total_cost,
+                'cash_balance': cash_balance
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Trade execution error: {str(e)}")
+        return jsonify({'error': 'Trade failed. Please try again.'}), 500
+
+
+@app.route('/api/transactions')
+@login_required
+def api_get_transactions():
+    """Get user's transaction history"""
+    user_email = current_user.id
+    try:
+        response = transactions_table.scan(
+            FilterExpression=Attr('email').eq(user_email),
+            Limit=50
+        )
+        
+        items = response.get('Items', [])
+        # Sort by timestamp descending
+        items.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+        return jsonify(items)
+    except Exception as e:
+        logger.error(f"Fetch transactions error: {str(e)}")
+        return jsonify({'error': 'Failed to fetch transactions'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
