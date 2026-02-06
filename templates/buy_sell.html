@@ -95,6 +95,7 @@
                 
                 <!-- Trade Form -->
                 <form class="trade-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="form-group">
                         <label for="order-type" class="form-label">Order Type</label>
                         <select id="order-type" class="form-select">

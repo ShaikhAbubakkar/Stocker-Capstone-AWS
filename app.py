@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta, datetime
+from decimal import Decimal
 import secrets
 import hashlib
 from functools import wraps
@@ -530,35 +531,41 @@ def api_portfolio_summary():
 @login_required
 def api_execute_trade():
     """Execute a buy or sell trade"""
-    data = request.get_json()
-    
-    symbol = data.get('symbol', '').upper()
-    action = data.get('action', '').lower()  # 'buy' or 'sell'
-    quantity = data.get('quantity', 0)
-    order_type = data.get('order_type', 'market')
-    
-    # Validate inputs
-    if not symbol or action not in ['buy', 'sell'] or quantity <= 0:
-        return jsonify({'error': 'Invalid trade parameters'}), 400
-    
-    # Get stock info
-    stock = get_stock(symbol)
-    if not stock:
-        return jsonify({'error': 'Stock not found'}), 404
-    
-    price = stock['price']
-    total_cost = price * quantity
-    user_id = current_user.user_id
-    user_email = current_user.id
-    
     try:
+        data = request.get_json()
+        
+        symbol = data.get('symbol', '').upper()
+        action = data.get('action', '').lower()  # 'buy' or 'sell'
+        quantity = int(data.get('quantity', 0))
+        order_type = data.get('order_type', 'market')
+        
+        logger.info(f"Trade request: {action} {quantity} {symbol} from {current_user.id}")
+        
+        # Validate inputs
+        if not symbol or action not in ['buy', 'sell'] or quantity <= 0:
+            logger.warning(f"Invalid trade params: symbol={symbol}, action={action}, qty={quantity}")
+            return jsonify({'error': 'Invalid trade parameters'}), 400
+        
+        # Get stock info
+        stock = get_stock(symbol)
+        if not stock:
+            logger.warning(f"Stock not found: {symbol}")
+            return jsonify({'error': 'Stock not found'}), 404
+        
+        price = float(stock['price'])
+        total_cost = price * quantity
+        user_id = current_user.user_id
+        user_email = current_user.id
+        
+        logger.info(f"Processing {action}: {quantity} {symbol} @ ${price} = ${total_cost}")
+        
         # Get or create portfolio
         portfolio_response = portfolios_table.get_item(Key={'user_id': user_id})
         portfolio = portfolio_response.get('Item', {
             'user_id': user_id,
             'email': user_email,
             'holdings': {},
-            'cash_balance': 10000.00,
+            'cash_balance': Decimal('10000.00'),
             'total_transactions': 0,
             'created_at': datetime.utcnow().isoformat(),
             'updated_at': datetime.utcnow().isoformat()
@@ -566,6 +573,63 @@ def api_execute_trade():
         
         holdings = portfolio.get('holdings', {})
         cash_balance = float(portfolio.get('cash_balance', 10000.00))
+        
+        logger.info(f"Current portfolio: holdings={holdings}, cash=${cash_balance}")
+        
+        if action == 'buy':
+            # Check if user has enough cash
+            if cash_balance < total_cost:
+                logger.warning(f"Insufficient funds: need ${total_cost}, have ${cash_balance}")
+                return jsonify({'error': f'Insufficient funds. Need ${total_cost:.2f}, have ${cash_balance:.2f}'}), 400
+            
+            # Update holdings
+            current_qty = int(holdings.get(symbol, 0))
+            holdings[symbol] = str(current_qty + quantity)
+            cash_balance -= total_cost
+            
+        elif action == 'sell':
+            # Check if user has enough shares
+            current_qty = int(holdings.get(symbol, 0))
+            if current_qty < quantity:
+                logger.warning(f"Insufficient shares: have {current_qty}, trying to sell {quantity}")
+                return jsonify({'error': f'Insufficient shares. Have {current_qty}, trying to sell {quantity}'}), 400
+            
+            # Update holdings
+            holdings[symbol] = str(current_qty - quantity)
+            if holdings[symbol] == '0':
+                del holdings[symbol]
+            cash_balance += total_cost
+        
+        logger.info(f"Updated portfolio: holdings={holdings}, cash=${cash_balance}")
+        
+        # Update portfolio in DynamoDB
+        portfolios_table.put_item(Item={
+            'user_id': user_id,
+            'email': user_email,
+            'holdings': holdings,
+            'cash_balance': Decimal(str(cash_balance)),
+            'total_transactions': int(portfolio.get('total_transactions', 0)) + 1,
+            'created_at': portfolio.get('created_at', datetime.utcnow().isoformat()),
+            'updated_at': datetime.utcnow().isoformat()
+        })
+        logger.info(f"Portfolio saved for {user_email}")
+        
+        # Record transaction
+        transaction_id = str(uuid.uuid4())
+        transactions_table.put_item(Item={
+            'transaction_id': transaction_id,
+            'user_id': user_id,
+            'email': user_email,
+            'symbol': symbol,
+            'action': action,
+            'quantity': quantity,
+            'price': Decimal(str(price)),
+            'total': Decimal(str(total_cost)),
+            'order_type': order_type,
+            'status': 'completed',
+            'timestamp': datetime.utcnow().isoformat()
+        })
+        logger.info(f"Transaction recorded: {transaction_id}")
         
         if action == 'buy':
             # Check if user has enough cash
