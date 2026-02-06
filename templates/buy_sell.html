@@ -217,27 +217,27 @@
             <div class="order-confirmation">
                 <div class="confirmation-row">
                     <span class="confirmation-label">Action</span>
-                    <span class="confirmation-value buy-text">BUY</span>
+                    <span class="confirmation-value buy-text" id="modal-action">BUY</span>
                 </div>
                 <div class="confirmation-row">
                     <span class="confirmation-label">Symbol</span>
-                    <span class="confirmation-value">AAPL</span>
+                    <span class="confirmation-value" id="modal-symbol">AAPL</span>
                 </div>
                 <div class="confirmation-row">
                     <span class="confirmation-label">Quantity</span>
-                    <span class="confirmation-value">10 shares</span>
+                    <span class="confirmation-value" id="modal-quantity">10</span> shares
                 </div>
                 <div class="confirmation-row">
                     <span class="confirmation-label">Order Type</span>
-                    <span class="confirmation-value">Market Order</span>
+                    <span class="confirmation-value" id="modal-order-type">Market Order</span>
                 </div>
                 <div class="confirmation-row">
                     <span class="confirmation-label">Estimated Price</span>
-                    <span class="confirmation-value">$178.42 per share</span>
+                    <span class="confirmation-value" id="modal-price">$178.42</span> per share
                 </div>
                 <div class="confirmation-row total">
                     <span class="confirmation-label">Total Cost</span>
-                    <span class="confirmation-value">$1,784.20</span>
+                    <span class="confirmation-value" id="modal-total">$1,784.20</span>
                 </div>
             </div>
         </div>
@@ -684,10 +684,14 @@ placeOrderBtn.addEventListener('click', function() {
     }
     
     // Update modal with order details
+    const orderType = document.getElementById('order-type').value;
+    const orderTypeText = orderType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Order';
     const total = window.currentStock.price * quantity;
+    
     document.getElementById('modal-symbol').textContent = window.currentStock.symbol;
     document.getElementById('modal-action').textContent = currentAction.toUpperCase();
     document.getElementById('modal-quantity').textContent = quantity;
+    document.getElementById('modal-order-type').textContent = orderTypeText;
     document.getElementById('modal-price').textContent = `$${window.currentStock.price.toFixed(2)}`;
     document.getElementById('modal-total').textContent = `$${total.toFixed(2)}`;
     
