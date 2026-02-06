@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Stocker{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ url_for('index') }}" class="navbar-logo">Stocker</a>
+        <ul class="navbar-menu">
+            <li><a href="{{ url_for('about') }}" class="navbar-link">About</a></li>
+            <li><a href="{{ url_for('contact') }}" class="navbar-link active">Contact</a></li>
+            <li><a href="{{ url_for('login') }}" class="navbar-link">Login</a></li>
+            <li><a href="{{ url_for('signup') }}" class="navbar-cta">Get Started</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Contact Hero -->
+<section class="contact-hero">
+    <div class="contact-hero-container">
+        <h1 class="contact-hero-title">Get in touch</h1>
+        <p class="contact-hero-subtitle">Our team is here to help with any questions about trading, account management, or platform features.</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="contact-container">
+        <!-- Contact Form -->
+        <div class="contact-form-wrapper">
+            <div class="form-header">
+                <h2 class="form-title">Send us a message</h2>
+                <p class="form-subtitle">Fill out the form below and we'll get back to you within 24 hours.</p>
+            </div>
+            
+            <form class="contact-form" method="POST" action="{{ url_for('contact') }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" id="first_name" name="first_name" class="form-input" placeholder="John" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" class="form-input" placeholder="Doe" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="john.doe@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject" class="form-label">Subject</label>
+                    <select id="subject" name="subject" class="form-input" required>
+                        <option value="">Select a topic</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="account">Account Support</option>
+                        <option value="trading">Trading Questions</option>
+                        <option value="technical">Technical Issues</option>
+                        <option value="partnership">Partnership Opportunities</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" name="message" class="form-input form-textarea" rows="6" placeholder="Tell us how we can help..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large btn-full">Send Message</button>
+            </form>
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="contact-info-wrapper">
+            <div class="contact-info-card">
+                <h3 class="info-card-title">Support Hours</h3>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <div>
+                        <div class="info-label">Monday - Friday</div>
+                        <div class="info-value">8:00 AM - 8:00 PM EST</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <div>
+                        <div class="info-label">Saturday - Sunday</div>
+                        <div class="info-value">9:00 AM - 5:00 PM EST</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-info-card">
+                <h3 class="info-card-title">Contact Methods</h3>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <div>
+                        <div class="info-label">Email</div>
+                        <div class="info-value">support@stocker.com</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <div>
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">1-800-STOCKER</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div>
+                        <div class="info-label">Live Chat</div>
+                        <div class="info-value">Available 24/7</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-info-card">
+                <h3 class="info-card-title">Office Location</h3>
+                <div class="info-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div>
+                        <div class="info-value">One Market Plaza</div>
+                        <div class="info-value">San Francisco, CA 94105</div>
+                        <div class="info-value">United States</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-info-card quick-links">
+                <h3 class="info-card-title">Quick Links</h3>
+                <a href="#" class="quick-link">Help Center</a>
+                <a href="#" class="quick-link">FAQ</a>
+                <a href="#" class="quick-link">Trading Guide</a>
+                <a href="#" class="quick-link">API Documentation</a>
+                <a href="#" class="quick-link">Security</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="faq-container">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3 class="faq-question">How do I open an account?</h3>
+                <p class="faq-answer">Click "Get Started" and complete our quick registration process. You'll need a valid email address and government-issued ID for verification. Most accounts are approved within 24 hours.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">What are your trading fees?</h3>
+                <p class="faq-answer">We charge $0 commission on stock trades with no minimum balance requirement. Premium features and margin accounts have competitive monthly fees starting at $4.99.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">Is my money safe with Stocker?</h3>
+                <p class="faq-answer">Yes. We use bank-grade encryption, multi-factor authentication, and your funds are SIPC insured up to $500,000. We never share your personal information without consent.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">Can I trade outside market hours?</h3>
+                <p class="faq-answer">Yes, Stocker supports extended-hours trading from 4:00 AM to 8:00 PM EST on weekdays, allowing you to react to market-moving news outside regular trading hours.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">How do I withdraw funds?</h3>
+                <p class="faq-answer">Navigate to your account settings and initiate a withdrawal to your linked bank account. Most withdrawals are processed within 1-3 business days with no fees.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">Do you offer mobile trading?</h3>
+                <p class="faq-answer">Yes, our platform is fully responsive and optimized for mobile devices. Native iOS and Android apps are currently in development and will launch in Q2 2026.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Contact Hero */
+.contact-hero {
+    padding: calc(var(--space-2xl) + 64px) var(--space-lg) var(--space-2xl);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.contact-hero-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.02em;
+}
+
+.contact-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-2xl);
+}
+
+/* Contact Form */
+.contact-form-wrapper {
+    background-color: var(--bg-secondary);
+    padding: var(--space-2xl);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.form-header {
+    margin-bottom: var(--space-xl);
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-input {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: var(--space-md);
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-focus);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+/* Contact Info */
+.contact-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.contact-info-card {
+    background-color: var(--bg-secondary);
+    padding: var(--space-xl);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.info-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+}
+
+.info-item {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item svg {
+    color: var(--accent-focus);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-label {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.quick-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: var(--space-sm) 0;
+    transition: color 0.2s;
+    font-size: 0.9375rem;
+}
+
+.quick-link:hover {
+    color: var(--accent-focus);
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: var(--space-2xl) var(--space-lg);
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.faq-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.faq-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    letter-spacing: -0.02em;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+}
+
+.faq-item {
+    background-color: var(--bg-primary);
+    padding: var(--space-xl);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.faq-question {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.faq-answer {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .contact-hero-title {
+        font-size: 2.25rem;
+    }
+    
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

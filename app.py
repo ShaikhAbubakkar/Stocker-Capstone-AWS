@@ -275,6 +275,46 @@ def signup():
     
     return render_template('signup.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        email = request.form.get('email')
+        subject = request.form.get('subject')
+        message = request.form.get('message')
+        
+        try:
+            # Send notification via SNS
+            if SNS_TOPIC_ARN:
+                contact_message = f"""
+New Contact Form Submission
+---------------------------
+Name: {first_name} {last_name}
+Email: {email}
+Subject: {subject}
+Message: {message}
+"""
+                sns_client.publish(
+                    TopicArn=SNS_TOPIC_ARN,
+                    Subject=f'Contact Form: {subject}',
+                    Message=contact_message
+                )
+            
+            logger.info(f"Contact form submitted by {email} - Subject: {subject}")
+            flash('Thank you for contacting us. We will respond within 24 hours.', 'success')
+        except Exception as e:
+            logger.error(f"Contact form error: {str(e)}")
+            flash('Message received. We will get back to you soon.', 'success')
+        
+        return redirect(url_for('contact'))
+    
+    return render_template('contact.html')
+
 @app.route('/logout')
 def logout():
     logout_user()

@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}About - Stocker{% endblock %}
+
+{% block content %}
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{{ url_for('index') }}" class="navbar-logo">Stocker</a>
+        <ul class="navbar-menu">
+            <li><a href="{{ url_for('about') }}" class="navbar-link active">About</a></li>
+            <li><a href="{{ url_for('contact') }}" class="navbar-link">Contact</a></li>
+            <li><a href="{{ url_for('login') }}" class="navbar-link">Login</a></li>
+            <li><a href="{{ url_for('signup') }}" class="navbar-cta">Get Started</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- About Hero -->
+<section class="about-hero">
+    <div class="about-hero-container">
+        <h1 class="about-hero-title">Building the future of institutional-grade trading</h1>
+        <p class="about-hero-subtitle">Stocker combines cutting-edge technology with professional-grade analytics to deliver a trading platform designed for serious investors.</p>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="mission-section">
+    <div class="mission-container">
+        <div class="mission-content">
+            <div class="mission-label">Our Mission</div>
+            <h2 class="mission-title">Empowering investors with institutional-grade tools</h2>
+            <p class="mission-text">We believe that every investor deserves access to professional trading infrastructure. Stocker was built from the ground up to provide retail investors with the same level of precision, speed, and analytical power that institutional traders have relied on for decades.</p>
+            <p class="mission-text">Our platform eliminates the complexity without sacrificing capability—delivering real-time execution, comprehensive portfolio management, and advanced analytics in an interface designed for clarity and confidence.</p>
+        </div>
+        <div class="mission-stats">
+            <div class="stat-item">
+                <div class="stat-value">$2.4B+</div>
+                <div class="stat-label">Trading Volume</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50K+</div>
+                <div class="stat-label">Active Traders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">&lt;50ms</div>
+                <div class="stat-label">Avg. Execution Time</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section">
+    <div class="values-container">
+        <h2 class="values-title">What drives us</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">Security First</h3>
+                <p class="value-card-text">Bank-grade encryption, multi-factor authentication, and continuous security audits ensure your investments are always protected.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">Precision Execution</h3>
+                <p class="value-card-text">Sub-millisecond order routing and real-time market data processing deliver institutional-level execution quality.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">Transparent Operations</h3>
+                <p class="value-card-text">Clear pricing, no hidden fees, and complete visibility into every trade and transaction across your portfolio.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">24/7 Availability</h3>
+                <p class="value-card-text">Around-the-clock platform access with 99.9% uptime SLA and responsive support when you need it most.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">Competitive Pricing</h3>
+                <p class="value-card-text">Industry-leading fee structure with volume discounts and no minimum balance requirements.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <h3 class="value-card-title">Community Focused</h3>
+                <p class="value-card-text">Built by traders, for traders—with active feedback loops and community-driven feature development.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Section -->
+<section class="tech-section">
+    <div class="tech-container">
+        <div class="tech-content">
+            <h2 class="tech-title">Built on reliable infrastructure</h2>
+            <p class="tech-text">Stocker leverages AWS cloud infrastructure for scalability, reliability, and security. Our architecture is designed to handle millions of transactions daily while maintaining sub-50ms execution times.</p>
+            <div class="tech-features">
+                <div class="tech-feature">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Real-time DynamoDB data synchronization</span>
+                </div>
+                <div class="tech-feature">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Event-driven architecture with SNS notifications</span>
+                </div>
+                <div class="tech-feature">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Auto-scaling compute infrastructure</span>
+                </div>
+                <div class="tech-feature">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>End-to-end encryption for all transactions</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container">
+        <h2 class="cta-title">Ready to start trading?</h2>
+        <p class="cta-text">Join thousands of investors using Stocker to manage their portfolios with confidence.</p>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-large">Create Your Account</a>
+    </div>
+</section>
+
+<style>
+/* About Hero */
+.about-hero {
+    padding: calc(var(--space-2xl) + 64px) var(--space-lg) var(--space-2xl);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-hero-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.02em;
+}
+
+.about-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Mission Section */
+.mission-section {
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.mission-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+}
+
+.mission-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent-focus);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+}
+
+.mission-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.02em;
+}
+
+.mission-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+}
+
+.mission-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    background-color: var(--bg-secondary);
+    padding: var(--space-2xl);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+    font-family: var(--font-mono);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Values Section */
+.values-section {
+    padding: var(--space-2xl) var(--space-lg);
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.values-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.values-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    letter-spacing: -0.02em;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+}
+
+.value-card {
+    background-color: var(--bg-primary);
+    padding: var(--space-xl);
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    transition: border-color 0.2s;
+}
+
+.value-card:hover {
+    border-color: var(--border-primary);
+}
+
+.value-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: var(--space-lg);
+    color: var(--accent-focus);
+}
+
+.value-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+}
+
+.value-card-text {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Technology Section */
+.tech-section {
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.tech-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tech-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.02em;
+}
+
+.tech-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-xl);
+}
+
+.tech-features {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.tech-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: 1rem;
+    color: var(--text-primary);
+    padding: var(--space-md);
+    background-color: var(--bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+}
+
+.tech-feature svg {
+    color: var(--accent-gain);
+    flex-shrink: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    padding: var(--space-2xl) var(--space-lg);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.cta-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.02em;
+}
+
+.cta-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+
+.btn-large {
+    padding: var(--space-lg) var(--space-2xl);
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .about-hero-title {
+        font-size: 2.25rem;
+    }
+    
+    .mission-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .mission-title {
+        font-size: 1.875rem;
+    }
+    
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cta-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mission-stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
